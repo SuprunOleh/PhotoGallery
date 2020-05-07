@@ -25,12 +25,24 @@ class PhotoGalleryFragment : Fragment() {
     companion object {
         fun newInstance(): PhotoGalleryFragment {
             return PhotoGalleryFragment()
-
-
-
         }
         private const val TAG = "PhotoGalleryFragment"
+    }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val thread = Thread.currentThread()
+        Log.d ("sov3", "${thread.toString()}")
+
+
+        retainInstance = true
+        FetchItemsTask().execute()
+
+        mImageDownloader = ImageDownloader()
+        mImageDownloader.start()
+        mImageDownloader.looper
+        Log.i (TAG, "Background thread started")
 
 
     }
@@ -57,16 +69,7 @@ class PhotoGalleryFragment : Fragment() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        retainInstance = true
-        FetchItemsTask().execute()
 
-        mImageDownloader = ImageDownloader()
-        mImageDownloader.start()
-        mImageDownloader.looper
-        Log.i (TAG, "Background thread started")
-    }
 
     override fun onDestroy() {
         super.onDestroy()
