@@ -1,5 +1,6 @@
 package com.gmail2548sov.photogallery
 
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Handler
 import android.os.HandlerThread
@@ -20,7 +21,17 @@ class ImageDownloader<T> : HandlerThread(TAG) {
 
     private var mHasQuit = false
     private lateinit var mRequestHandler: Handler
+    private lateinit var mResponseHandler: Handler
     private val mRequestMap: ConcurrentMap<T, String> = ConcurrentHashMap()
+    private lateinit var mImageDownloadListener: ImageDownloadListener<T>
+
+    interface ImageDownloadListener<T> {
+        fun onImageDownloaded(target:T, image: Bitmap)
+    }
+     fun setImageDownloadListener(listener:ImageDownloadListener<T>) {
+         mImageDownloadListener = listener
+     }
+
 
 
     override fun quit(): Boolean {
