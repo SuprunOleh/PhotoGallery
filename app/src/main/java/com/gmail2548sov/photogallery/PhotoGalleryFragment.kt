@@ -1,8 +1,11 @@
 package com.gmail2548sov.photogallery
 
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.AsyncTask
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +16,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_photo_gallery.view.*
 import kotlinx.android.synthetic.main.item_photo.view.*
+
 
 class PhotoGalleryFragment : Fragment() {
 
@@ -32,17 +36,41 @@ class PhotoGalleryFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val responseHandler: Handler = Handler()
+
+
         val thread = Thread.currentThread()
         Log.d ("sov3", "${thread.toString()}")
-
 
         retainInstance = true
         FetchItemsTask().execute()
 
-        mImageDownloader = ImageDownloader()
+        mImageDownloader = ImageDownloader(responseHandler)
+
+        mImageDownloader.setImageDownloadListener(object :
+            ImageDownloader.ImageDownloadListener<PhotoHolder> {
+            override fun onImageDownloaded(target: PhotoHolder, image: Bitmap) {
+                val drawable: Drawable = BitmapDrawable(resources, image)
+                target.bindGalleryItem(drawable)
+
+            }
+        })
+
+
+
+
         mImageDownloader.start()
         mImageDownloader.looper
         Log.i (TAG, "Background thread started")
+
+
+
+
+
+
+
+
+
 
 
     }

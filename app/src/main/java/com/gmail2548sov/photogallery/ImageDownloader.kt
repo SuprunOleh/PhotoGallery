@@ -7,12 +7,11 @@ import android.os.HandlerThread
 import android.os.Message
 import android.util.Log
 import java.io.IOException
-import java.lang.Exception
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 
 
-class ImageDownloader<T> : HandlerThread(TAG) {
+class ImageDownloader<T> (private val mResponseHandler: Handler) : HandlerThread(TAG) {
 
     companion object {
         private final val MESSAGE_DOWNLOAD: Int = 0
@@ -21,14 +20,14 @@ class ImageDownloader<T> : HandlerThread(TAG) {
 
     private var mHasQuit = false
     private lateinit var mRequestHandler: Handler
-    private lateinit var mResponseHandler: Handler
+    //private lateinit var mResponseHandler: Handler
     private val mRequestMap: ConcurrentMap<T, String> = ConcurrentHashMap()
     private lateinit var mImageDownloadListener: ImageDownloadListener<T>
 
     interface ImageDownloadListener<T> {
         fun onImageDownloaded(target:T, image: Bitmap)
     }
-     fun setImageDownloadListener(listener:ImageDownloadListener<T>) {
+     fun setImageDownloadListener(listener: ImageDownloadListener<T>) {
          mImageDownloadListener = listener
      }
 
