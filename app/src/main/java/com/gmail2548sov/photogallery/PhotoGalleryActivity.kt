@@ -8,8 +8,4 @@ class PhotoGalleryActivity : SingleFragmentActivity() {
         return PhotoGalleryFragment.newInstance()
     }
 
-
-
-
-
 }

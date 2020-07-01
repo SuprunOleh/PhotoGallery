@@ -64,15 +64,11 @@ class PhotoGalleryFragment : Fragment() {
         Log.i (TAG, "Background thread started")
 
 
+    }
 
-
-
-
-
-
-
-
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mImageDownloader.clearQueue()
     }
 
     override fun onCreateView(

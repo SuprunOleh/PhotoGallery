@@ -1,5 +1,6 @@
 package com.gmail2548sov.photogallery
 
+import android.R.attr
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Handler
@@ -68,6 +69,19 @@ class ImageDownloader<T> (private val mResponseHandler: Handler) : HandlerThread
             val bitmapBytes: ByteArray? = FlickrFetchr().getUrlBytes(url)
             val bitmap = BitmapFactory.decodeByteArray(bitmapBytes,0, bitmapBytes!!.size)
             Log.i(TAG, "Bitmap created")
+
+            mResponseHandler.post(Runnable {
+                if (mRequestMap[target] !== url ||
+                    mHasQuit
+                ) {
+                    return@Runnable
+                }
+                mRequestMap.remove(target)
+                mImageDownloadListener.onImageDownloaded(
+                    target,bitmap)
+            })
+
+
         } catch (ioe: IOException) {
             Log.e (TAG, "Error download image", ioe)
         }
@@ -75,8 +89,9 @@ class ImageDownloader<T> (private val mResponseHandler: Handler) : HandlerThread
     }
 
 
-
-
-
+    fun clearQueue() {
+        mRequestHandler.removeMessages(MESSAGE_DOWNLOAD)
+        mRequestMap.clear()
+    }
 
 }
