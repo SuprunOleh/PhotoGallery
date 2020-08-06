@@ -66,6 +66,7 @@ class ImageDownloader<T> (private val mResponseHandler: Handler) : HandlerThread
     fun handleRequest(target: T) {
         try {
             val url: String = mRequestMap.get(target)?:return
+            Log.i("qqq",url.toString())
             val bitmapBytes: ByteArray? = FlickrFetchr().getUrlBytes(url)
             val bitmap = BitmapFactory.decodeByteArray(bitmapBytes,0, bitmapBytes!!.size)
             Log.i(TAG, "Bitmap created")

@@ -35,15 +35,14 @@ class PhotoGalleryFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         val responseHandler: Handler = Handler()
-
-
         val thread = Thread.currentThread()
         Log.d ("sov3", "${thread.toString()}")
 
         retainInstance = true
         FetchItemsTask().execute()
+
+        Log.d ("sup333", "onCreate")
 
         mImageDownloader = ImageDownloader(responseHandler)
 
@@ -79,21 +78,19 @@ class PhotoGalleryFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_photo_gallery, container, false)
         mPhotoRecyclerView = view.photo_recycler_view
 
-        mPhotoRecyclerView.layoutManager = GridLayoutManager(context, 3)
+        mPhotoRecyclerView.layoutManager = GridLayoutManager(context, 2)
+        Log.d ("sup333", "onCreateView")
         setupAdapter()
+        Log.d ("sup333", "setAdapter2")
         Log.d ("c222", "111")
-
         return view
     }
 
     fun setupAdapter() {
-
         if (isAdded) {
             mPhotoRecyclerView.adapter = PhotoAdapter(mGalleryItems)
         }
     }
-
-
 
     override fun onDestroy() {
         super.onDestroy()
@@ -110,6 +107,7 @@ class PhotoGalleryFragment : Fragment() {
         override fun onPostExecute(items: List<GalleryItem>) {
             mGalleryItems = items
             setupAdapter()
+            Log.d ("sup333", "setAdapter1")
         }
     }
 

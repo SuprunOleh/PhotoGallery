@@ -21,6 +21,7 @@ class FlickrFetchr {
     @Throws(IOException::class)
     fun getUrlBytes(urlSpec: String): ByteArray? {
         val url = URL(urlSpec)
+        Log.i("sss137", "${url.toString()}")
         val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
         return try {
             val out = ByteArrayOutputStream()
@@ -50,7 +51,6 @@ class FlickrFetchr {
     }
 
     fun fetchItems(): List<GalleryItem> {
-
         val items: ArrayList<GalleryItem> = ArrayList()
         try {
             val url: String = Uri.parse("https://api.flickr.com/services/rest/")
@@ -60,12 +60,15 @@ class FlickrFetchr {
                 .appendQueryParameter("format", "json")
                 .appendQueryParameter("nojsoncallback", "1")
                 .appendQueryParameter("extras", "url_s")
+                .appendQueryParameter("per_page", "500")
                 .build().toString()
             val jsonString = getUrlString(url)
-            Log.i(TAG, "Received JSON: $jsonString")
+            Log.i("sss134", "Received JSON: $jsonString")
+            Log.i("sss135", "${getUrlString("https://www.ukr.net/").toString()}")
 
             val jsonBody = JSONObject(jsonString)
             parseItems(items, jsonBody)
+            Log.i("sss136", "$items.toString()}")
 
         } catch (ioe: IOException) {
             Log.e(TAG, "Failed to fetch items", ioe)
